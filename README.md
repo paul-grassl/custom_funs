@@ -1,4 +1,4 @@
-This repository contains personal research tipps and scripts that help me automising certain tasks like the reporting of statistical results.  
+This repository contains personal research tips and scripts that help me automising certain tasks like the reporting of statistical results.  
 
 ## Project steps:
 **Start of the project:**
