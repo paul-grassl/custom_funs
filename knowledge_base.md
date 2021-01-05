@@ -1,7 +1,6 @@
 <!-- knowledge_base.md is generated from knowledge_base.Rmd. Please edit that file -->
 
-How to set priors:
-------------------
+## How to set priors:
 
 ### For Gaussian models:
 
@@ -21,14 +20,14 @@ independent variables.
 
 We want a prior for the intercept of `pulled_left` so what is the
 general probability of a chimpanzee pulling either lever. If we use a
-*Normal(0, 10)* prior the probability is only on 0 and 1, so the model
+Normal(0, 10) prior the probability is only on 0 and 1, so the model
 thinks that chimpanzees either never or always pull the the left lever.
 Better is something that distributes the probability more in the middle
-like *Normal(0, 1)*. We have to take into account that a normal
+like Normal(0, 1). We have to take into account that a normal
 distribution becomes logit-normal because of the logit link function in
-binomial regression. Let's plot prior predictive checks:
+binomial regression. Let’s plot prior predictive checks:
 
-``` {.r}
+``` r
 # I'm using the logitnorm package here because there is no standard implementation of a logit-normal distribution in R
 # x is the probability of pulling left/right (left = 1)
 # y is the density
@@ -45,7 +44,7 @@ ggplot2::ggplot(data.frame(x = c(0:1)), aes = (x = x)) +
 
 ### For Poisson models (log link):
 
-Let's say you have a count of how many fish was fished in a lake per
+Let’s say you have a count of how many fish was fished in a lake per
 day. So there is no upper boundary (hence we use Poisson)
 
 #### Intercept a:
@@ -56,16 +55,16 @@ a log link function a normal prior becomes log-normal. To know what a
 normal mean and standard deviation translate to on the log-normal scale
 we can use the following formula to calculate the log-normal mean:
 
-``` {.r}
+``` r
 exp(mean + sd^2/2)
 ```
 
-A normal prior like *Normal(0, 10)* becomes `exp(50)`as mean which is
+A normal prior like Normal(0, 10) becomes `exp(50)`as mean which is
 complete nonsense (super huge number). For our example something like
-*Normal(3, 1)* would be better. Now the mean is around 33 fish. To plot
+Normal(3, 1) would be better. Now the mean is around 33 fish. To plot
 different mean and sd combinations (on log-normal scale) use:
 
-``` {.r}
+``` r
 # y just the prob density
 ggplot2::ggplot(data.frame(x = c(0:200)), aes = (x = x)) + 
   stat_function(fun = dlnorm, args = list(meanlog = 3, sdlog = 1)) +
