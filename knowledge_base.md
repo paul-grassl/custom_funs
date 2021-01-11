@@ -31,7 +31,7 @@ binomial regression. Let’s plot prior predictive checks:
 # I'm using the logitnorm package here because there is no standard implementation of a logit-normal distribution in R
 # x is the probability of pulling left/right (left = 1)
 # y is the density
-ggplot2::ggplot(data.frame(x = c(0:1)), aes = (x = x)) + 
+ggplot(data.frame(x = c(0:1)), aes(x)) + 
   stat_function(fun = logitnorm::dlogitnorm, args = list(mu = 0, sigma = 1), colour = 'red') +
   stat_function(fun = logitnorm::dlogitnorm, args = list(mu = 0, sigma = 10), colour = 'black') +
   scale_x_continuous(limits = c(0,1)) +
@@ -41,6 +41,81 @@ ggplot2::ggplot(data.frame(x = c(0:1)), aes = (x = x)) +
 <img src="figures/unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;" />
 
 #### Predictor coefficient b:
+
+Let’s start in case we have some dichotomous predictor variable like
+`prosocial_left`, but this strategy works also for continuous predictors
+(you have to check however whether you want to center or standardise
+them; for prior selection that can actually be easier). Basically (as a
+rule-of thumb), we can think of a plot with the range of the outcome
+(`pulled_left`) on the y-axis and the range of a predictor
+(`prosoc_left`) on the x-axis. The range of the outcome is just 0 - 1
+(pulled right vs. pulled left) and the range of our predictor is also 0
+- 1 (prosocial option right vs left). The biggest positive effect
+imaginable is going from pulled right (0) to pulled left (1) because the
+prosocial options is moved from right (0) to left (1). If we draw a
+line, it has a slope of 1. The biggest negative effect would be -1.
+
+``` r
+ggplot(data.frame(x = c(0:1))) +
+  aes(x) +
+  stat_function(fun = function(x) x, colour = "darkolivegreen4") +
+  stat_function(fun = function(x) 1 - x, colour = "orangered2")
+```
+
+<img src="figures/unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;" />
+
+This makes us think that slopes between -1 and 1 are what to expect in
+most cases. We hence say that our slopes are normally distributed with
+mean = 0 (we don’t nudge the effect to be either positive or negative)
+and standard deviation of 0.5 (so 2 SDs equal 1 (or -1) and represent
+the \~95% borders). To see how these slopes look like (the relationships
+that are possible between x and y) we can plot the linear model part of
+our model (while also inversing the logit link so we actually plot
+probability rather than log odds). This is important because with our
+rule-of-thumb if think in linear terms. In Binomial models however there
+is the logit-link which makes our priors behave different than we
+expect. So always plot the slope in combination with the intercept prior
+and the inverse of the link function.
+
+``` r
+N <- 100 # how many prior slopes do you want
+a <- rnorm(N, 0, 1) # intercept prior that we decided on earlier
+b <- rnorm(N, 0, 1) # beta prior
+
+# we could use a for loop and curve() like McELreath...but we choose ggplot ;)
+
+# the first two lines just create an empty plot
+# the map function from purrr applies my function (linear model function with inverse logit to have probability instead of log odds) to each element (.x) of the vector 1:N (N is the number of slopes I want to plot)
+# the size argument makes the lines thinner (default is something like 0.5)
+ggplot(data.frame(x = 0:1)) +
+  aes(x) +
+  ylim(0,1) +
+  purrr::map(
+    1:N,
+    ~ stat_function(
+      fun = function(x) inv_logit(a[.x] + b[.x]*x),
+      size = 0.3)
+  )
+```
+
+<img src="figures/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
+
+Some slopes are positive, some are negative and all look realistic. If
+you go for some prior like N(0, 10) for beta, you will end up with
+mostly very extreme relationships. If the predictor would be continuous
+(e.g. heigth of the chimpanzee) we would first decide on centering or
+standardisation (center is good as a default; if I have big differences
+in scale between predictors it would also be good to standardise them;
+for instance if one predictor goes from 0 to 1 and the other from -100
+to 100). After that we can think about the range of x and y as min/max
+on our axises again and come up with a prior. Let’s say we have a
+standardised continuous predictor with 95% of values between -2 and 2,
+then our SD is 1 (mean 0 as usual if we don’t want to say something
+about the valence of the effect).
+
+*Note: There may be other ways to decide on beta priors, such as the
+difference between different treatments for instance. For this check
+Rethinking chapter about Binomial regression page 336-337.*
 
 ### For Poisson models (log link):
 
@@ -56,7 +131,7 @@ normal mean and standard deviation translate to on the log-normal scale
 we can use the following formula to calculate the log-normal mean:
 
 ``` r
-exp(mean + sd^2/2)
+exp(mean + sd^2/2) = 5.184706e+21
 ```
 
 A normal prior like Normal(0, 10) becomes `exp(50)`as mean which is
@@ -72,6 +147,42 @@ ggplot2::ggplot(data.frame(x = c(0:200)), aes = (x = x)) +
   labs(x = "Number of fish", y = "Probability density")
 ```
 
-<img src="figures/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="figures/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
 
 #### Predictor coefficient b:
+
+This is similar to finding priors in the binomial case, the only
+difference when plotting the linear model is that we have to reverse a
+log-link instead of a logit-link. We do that with exponentiation
+(`exp()` in R). In our fishing example there might be binary predictors
+like whether you use a `livebait` or whether you came in a `camper`.
+There might also be a variable how many adult `persons` where in the
+group (there can be kids too). For the binary predictors we just think
+of our rule-of-thumb and end up with a y range of 0-200 and x range of
+0-1. On a linear scale we would now say we choose a slope of 200 which
+results in a SD of 100 (remember that 200 would be 2 SDs). The problem
+is that we have to take the log-link into account. If you want try to
+plot slopes with a prior for b with SD = 100 with and without the exp().
+Without the inverse we actually get “meaningful” slopes (however the
+intercept prior is still matched to the link function and thus binds
+everything on the left side together). With the inverse link (exp()) the
+slopes are crazy. So we have to try again which ones work with the
+inverse link. A SD of 1 seems okay once again.
+
+``` r
+N <- 100 # how many prior slopes do you want
+a <- rnorm(N, 3, 1) # intercept prior that we decided on earlier
+b <- rnorm(N, 0, 1)
+
+ggplot(data.frame(x = 0:1)) +
+  aes(x) +
+  ylim(0, 200) +
+  purrr::map(
+    1:N,
+    ~ stat_function(
+      fun = function(x) exp(a[.x] + b[.x]*x),
+      size = 0.3)
+  )
+```
+
+<img src="figures/unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" />
