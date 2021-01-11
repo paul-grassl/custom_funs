@@ -2,9 +2,12 @@
 
 ## How to set priors:
 
-### For Gaussian models:
+[For Gaussian models](#for-gaussian-models)  
+[poisson](#for-poisson-models)
 
-### For Binomial models (logit link):
+### For Gaussian models
+
+### For Binomial models (logit link)
 
 As an example we choose the prosocial chimpanzees experiment from
 McElreath (Chapter Binomial regression p. 333). They sit in front of a
@@ -16,7 +19,7 @@ right = 0) with `prosocial_left` (coding: prosocial on the left = 1) and
 `condition` (featuring another chimpanzee on the other side = 1) as
 independent variables.
 
-#### Intercept a:
+#### Intercept a
 
 We want a prior for the intercept of `pulled_left` so what is the
 general probability of a chimpanzee pulling either lever. If we use a
@@ -40,7 +43,7 @@ ggplot(data.frame(x = c(0:1)), aes(x)) +
 
 <img src="figures/unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;" />
 
-#### Predictor coefficient b:
+#### Predictor coefficient b
 
 Let’s start in case we have some dichotomous predictor variable like
 `prosocial_left`, but this strategy works also for continuous predictors
@@ -117,12 +120,12 @@ about the valence of the effect).
 difference between different treatments for instance. For this check
 Rethinking chapter about Binomial regression page 336-337.*
 
-### For Poisson models (log link):
+### For Poisson models
 
 Let’s say you have a count of how many fish was fished in a lake per
 day. So there is no upper boundary (hence we use Poisson)
 
-#### Intercept a:
+#### Intercept a
 
 Before seeing the data we expect that people fish mostly between 10 and
 40 fish per day but also numbers like 100 can happen. Since Poisson uses
@@ -149,7 +152,7 @@ ggplot2::ggplot(data.frame(x = c(0:200)), aes = (x = x)) +
 
 <img src="figures/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;" />
 
-#### Predictor coefficient b:
+#### Predictor coefficient b
 
 This is similar to finding priors in the binomial case, the only
 difference when plotting the linear model is that we have to reverse a
