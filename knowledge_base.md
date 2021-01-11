@@ -2,10 +2,10 @@
 
 # How to set priors:
 
-
 ## Table of contents
-[Gaussian models](#gaussian-models)
-[Binomial models](#binomial-models-logit-link)
+
+[Gaussian models](#gaussian-models)  
+[Binomial models](#binomial-models-logit-link)  
 [Poisson models](#poisson-models-log-link)
 
 ### Gaussian models
@@ -123,7 +123,7 @@ about the valence of the effect).
 difference between different treatments for instance. For this check
 Rethinking chapter about Binomial regression page 336-337.*
 
-### For Poisson models (log link)
+### Poisson models (log link)
 
 Let’s say you have a count of how many fish was fished in a lake per
 day. So there is no upper boundary (hence we use Poisson)
