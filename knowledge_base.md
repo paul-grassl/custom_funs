@@ -1,13 +1,16 @@
 <!-- knowledge_base.md is generated from knowledge_base.Rmd. Please edit that file -->
 
-## How to set priors:
+# How to set priors:
 
-[For Gaussian models](#for-gaussian-models)  
-[poisson](#for-poisson-models)
 
-### For Gaussian models
+## Table of contents
+[Gaussian models](#gaussian-models)
+[Binomial models](#binomial-models-logit-link)
+[Poisson models](#poisson-models-log-link)
 
-### For Binomial models (logit link)
+### Gaussian models
+
+### Binomial models (logit link)
 
 As an example we choose the prosocial chimpanzees experiment from
 McElreath (Chapter Binomial regression p. 333). They sit in front of a
@@ -120,7 +123,7 @@ about the valence of the effect).
 difference between different treatments for instance. For this check
 Rethinking chapter about Binomial regression page 336-337.*
 
-### For Poisson models
+### For Poisson models (log link)
 
 Let’s say you have a count of how many fish was fished in a lake per
 day. So there is no upper boundary (hence we use Poisson)

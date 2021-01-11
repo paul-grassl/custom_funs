@@ -29,15 +29,16 @@ ggplot2::theme_set(bayesplot::theme_default())
 set.seed(1234)
 ```
 
+# How to set priors:
 
-## How to set priors:
+## Table of contents
+[Gaussian models](#gaussian-models)  
+[Binomial models](#binomial-models-logit-link)  
+[Poisson models](#poisson-models-log-link)  
 
-[For Gaussian models](#for-gaussian-models)  
-[poisson](#for-poisson-models)
+### Gaussian models
 
-### For Gaussian models
-
-### For Binomial models (logit link)
+### Binomial models (logit link)
 As an example we choose the prosocial chimpanzees experiment from McElreath (Chapter Binomial regression p. 333). They sit in front of a table with two levers (left, right) and across the table sits either another chimpanzee or no one. One of the levers gives both chimanzees food, the other one only the chimpanzee that makes the decision/pulls the lever. The dependent variable is `pulled_left` (coding: left = 1, right = 0) with `prosocial_left` (coding: prosocial on the left = 1) and `condition` (featuring another chimpanzee on the other side = 1) as independent variables.
 
 #### Intercept a
@@ -94,7 +95,7 @@ If the predictor would be continuous (e.g. heigth of the chimpanzee) we would fi
 
 *Note: There may be other ways to decide on beta priors, such as the difference between different treatments for instance. For this check Rethinking chapter about Binomial regression page 336-337.*
 
-### For Poisson models
+### Poisson models (log link)
 Let's say you have a count of how many fish was fished in a lake per day. So there is no upper boundary (hence we use Poisson)
 
 #### Intercept a
