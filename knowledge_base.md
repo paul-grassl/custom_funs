@@ -48,9 +48,9 @@ Let’s start in case we have some dichotomous predictor variable like
 them; for prior selection that can actually be easier). Basically (as a
 rule-of thumb), we can think of a plot with the range of the outcome
 (`pulled_left`) on the y-axis and the range of a predictor
-(`prosoc_left`) on the x-axis. The range of the outcome is just 0 - 1
-(pulled right vs. pulled left) and the range of our predictor is also 0
-- 1 (prosocial option right vs left). The biggest positive effect
+(`prosoc_left`) on the x-axis. The range of the outcome is just 0-1
+(pulled right vs. pulled left) and the range of our predictor is also
+0-1 (prosocial option right vs left). The biggest positive effect
 imaginable is going from pulled right (0) to pulled left (1) because the
 prosocial options is moved from right (0) to left (1). If we draw a
 line, it has a slope of 1. The biggest negative effect would be -1.
@@ -137,7 +137,7 @@ exp(mean + sd^2/2) = 5.184706e+21
 A normal prior like Normal(0, 10) becomes `exp(50)`as mean which is
 complete nonsense (super huge number). For our example something like
 Normal(3, 1) would be better. Now the mean is around 33 fish. To plot
-different mean and sd combinations (on log-normal scale) use:
+different mean and SD combinations (on log-normal scale) use:
 
 ``` r
 # y just the prob density
